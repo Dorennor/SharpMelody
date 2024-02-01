@@ -7,6 +7,10 @@
 .env
 
 # User-specific files
+*.db
+*.db-shm
+*.db-wal
+*.sln
 *.rsuser
 *.suo
 *.user
@@ -34,6 +38,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+[Mm]usic/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
