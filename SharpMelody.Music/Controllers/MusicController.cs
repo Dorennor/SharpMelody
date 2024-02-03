@@ -31,7 +31,7 @@ namespace SharpMelody.Music.Controllers
             await _libraryService.Refresh();
         }
 
-        [Route("performers/getPerformerByName{name}")]
+        [Route("performers/{name}")]
         [HttpGet]
         public Performer GetPerformer(string name = "Alestorm")
         {
@@ -39,7 +39,7 @@ namespace SharpMelody.Music.Controllers
 
             if (performer == null)
             {
-                Log.Information($"{DateTime.Now} Performer {name} doesn't exist.");
+                Log.Warning($"{DateTime.Now} Performer {name} doesn't exist.");
                 throw new NullReferenceException();
             }
 
@@ -54,7 +54,7 @@ namespace SharpMelody.Music.Controllers
 
             if (performer == null)
             {
-                Log.Information($"{DateTime.Now} Performer {id} doesn't exist.");
+                Log.Warning($"{DateTime.Now} Performer {id} doesn't exist.");
                 throw new NullReferenceException();
             }
 
@@ -69,7 +69,7 @@ namespace SharpMelody.Music.Controllers
 
             if (performer == null)
             {
-                Log.Information($"{DateTime.Now} Performer {name} doesn't exist.");
+                Log.Warning($"{DateTime.Now} Performer {name} doesn't exist.");
                 throw new NullReferenceException();
             }
 
@@ -77,7 +77,7 @@ namespace SharpMelody.Music.Controllers
 
             if (albums == null)
             {
-                Log.Information($"{DateTime.Now} No albums.");
+                Log.Warning($"{DateTime.Now} No albums.");
                 throw new NullReferenceException();
             }
 
@@ -92,7 +92,7 @@ namespace SharpMelody.Music.Controllers
 
             if (performer == null)
             {
-                Log.Information($"{DateTime.Now} Performer {id} doesn't exist.");
+                Log.Warning($"{DateTime.Now} Performer {id} doesn't exist.");
                 throw new NullReferenceException();
             }
 
@@ -100,7 +100,7 @@ namespace SharpMelody.Music.Controllers
 
             if (albums == null)
             {
-                Log.Information($"{DateTime.Now} No albums.");
+                Log.Warning($"{DateTime.Now} No albums.");
                 throw new NullReferenceException();
             }
 

@@ -1,15 +1,20 @@
-﻿using SharpMelody.Music.Data;
+﻿using System.Text.RegularExpressions;
+using SharpMelody.Music.Data;
 using SharpMelody.Music.Entities;
 
 using TagLib.Flac;
 
 namespace SharpMelody.Music.Services
 {
+    //TODO Interface
     public class LibraryService
     {
-        private readonly FileSystemWatcher _fileSystemWatcher;
+        private readonly Regex _pattern;
+        private readonly FileSystemWatcher _musicFileSystemWatcher;
+        private readonly FileSystemWatcher _inputFIleSystemWatcher;
         private readonly MusicDbContext _musicDbContext;
         private readonly string _musicPath;
+        private readonly string _inputPath;
         public List<Performer> Performers { get; set; } = new List<Performer>();
 
         public LibraryService(MusicDbContext musicDbContext)
@@ -20,7 +25,7 @@ namespace SharpMelody.Music.Services
 
             InitializeLibrary();
 
-            _fileSystemWatcher = new FileSystemWatcher
+            _musicFileSystemWatcher = new FileSystemWatcher
             {
                 Path = _musicPath,
                 NotifyFilter = NotifyFilters.LastWrite,
@@ -29,7 +34,23 @@ namespace SharpMelody.Music.Services
                 IncludeSubdirectories = true
             };
 
-            _fileSystemWatcher.Changed += new FileSystemEventHandler((sender, args) => InitializeLibrary());
+            _musicFileSystemWatcher.Changed += new FileSystemEventHandler((sender, args) => InitializeLibrary());
+
+            _inputPath = Path.Combine(Directory.GetCurrentDirectory(), "Input");
+
+            _inputFIleSystemWatcher = new FileSystemWatcher
+            {
+                Path = _inputPath,
+                NotifyFilter = NotifyFilters.LastWrite,
+                Filter = "*.*",
+                EnableRaisingEvents = true,
+                IncludeSubdirectories = true
+            };
+
+            _inputFIleSystemWatcher.Changed += new FileSystemEventHandler((sender, args) => InitialzieStorage());
+
+            _pattern = new Regex("[;:,*?|/]|[.]{3}");
+
         }
 
         public async Task Refresh()
@@ -37,8 +58,38 @@ namespace SharpMelody.Music.Services
             await Task.Run(InitializeLibrary);
         }
 
+
+        private void InitialzieStorage()
+        {
+            Thread.Sleep(300);
+
+            string[] filesPath = Directory.GetFiles(_inputPath);
+
+            foreach (var filePath in filesPath)
+            {
+                //TODO StringBuilder?
+                var songFile = TagLib.File.Create(filePath);
+                var songName = filePath.Split('\\').Last();
+
+                var newFilePath = _musicPath + "\\" + _pattern.Replace(songFile.Tag.FirstPerformer, "_");
+
+                Directory.CreateDirectory(newFilePath);
+
+                newFilePath += "\\" + _pattern.Replace(songFile.Tag.Album, "_");
+
+                Directory.CreateDirectory(newFilePath);
+
+                newFilePath += "\\" + _pattern.Replace(songName, "_");
+
+                System.IO.File.Move(filePath, newFilePath, true);
+            }
+        }
+
         private void InitializeLibrary()
         {
+            Thread.Sleep(300);
+
+            //TODO StringBuilder?
             Performers = new List<Performer>();
 
             string[] performersPaths = Directory.GetDirectories(_musicPath);
@@ -66,8 +117,8 @@ namespace SharpMelody.Music.Services
 
                     performer.Albums.Add(album);
 
-                    _musicDbContext.Performsers.Add(performer);
-                    _musicDbContext.Albums.Add(album);
+                    //_musicDbContext.Performsers.Add(performer);
+                    //_musicDbContext.Albums.Add(album);
 
                     foreach (var songName in Directory.GetFiles(albumPath))
                     {
@@ -90,6 +141,7 @@ namespace SharpMelody.Music.Services
 
                         foreach (var tag in tags)
                         {
+                            //TODO remove empty strings
                             try
                             {
                                 var value = (string)(tag.GetValue(songFile.Tag) ?? string.Empty);
@@ -104,11 +156,11 @@ namespace SharpMelody.Music.Services
                         album.Songs.Add(song);
                         Performers.Add(performer);
 
-                        _musicDbContext.Songs.Add(song);
+                        //_musicDbContext.Songs.Add(song);
                     }
                 }
 
-                _musicDbContext.SaveChanges();
+                //_musicDbContext.SaveChanges();
             }
         }
     }

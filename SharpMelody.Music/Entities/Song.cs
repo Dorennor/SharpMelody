@@ -17,6 +17,7 @@ namespace SharpMelody.Music.Entities
         public Guid AlbumId { get; set; }
         [NotMapped]
         public Dictionary<string, string> Metadata { get; set; } = new Dictionary<string, string>();
+
         [Column("Metadata")]
         private string MetadataJson
         {

@@ -10,7 +10,6 @@
 *.db
 *.db-shm
 *.db-wal
-*.sln
 *.rsuser
 *.suo
 *.user
@@ -39,6 +38,7 @@ bld/
 [Ll]og/
 [Ll]ogs/
 [Mm]usic/
+[Ii]nput/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
@@ -487,3 +487,6 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Solution file is temporary ignored
+SharpMelody.sln

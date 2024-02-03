@@ -21,7 +21,7 @@
 
 // (I)MusicRepository
 // CR-U
-// *use TagSharp for metadata extraction on song add*
+// _use TagSharp for metadata extraction on song add_
 // unit tests for edge cases + happy path
 // testing framework - xUnit, nUint
 // red - green - refactor
@@ -34,8 +34,29 @@
 
 // TODO OS
 //=================================
-// EF Core -> add 
+// EF Core -> add
 // table for metadata for persistence
 // Research DB (PostgreSQL) for metadata storage
 // Songs metadata => artist | title | album | year | genre | length | filename
 // Genre/singer statistics
+
+//------------------------------------------------------------------------------
+
+03.02.2024
+
+VR
+
+0. Finish (refactor) LivraryService (add interface?).
+1. Improve initialization and update process of library
+2. Rest API naming (api/music/performer/{name} + api/music/performer/?)
+3. Endpoints for lists (Skip/take optional params)
+
+OS
+
+1. Finish Docker configuration
+
+//TODOLIST
+
+1. Async library initialization
+2. Tests
+3. Controller => minimal API
