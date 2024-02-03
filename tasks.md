@@ -54,6 +54,8 @@ VR
 OS
 
 1. Finish Docker configuration
+2. Endpoints (songs -> id, name)
+3. Investigate auth
 
 //TODOLIST
 
