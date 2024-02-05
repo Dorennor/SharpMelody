@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  pg-melody:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: "melody"
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "pgpwdms"
+      PGDATA: "/melody-data/pgdata"
+    volumes:
+      - melody-data:/melody-data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d melody"]
+      interval: 30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 4G
+
+volumes:
+  melody-data:
